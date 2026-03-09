@@ -2,13 +2,7 @@ import type { Cocktail } from "../../../types";
 import { getCocktailsByID } from "../../../lib/api/cocktails";
 import "./page.css";
 
-interface Props {
-  params: {
-    id: string;
-  };
-}
-
-export default async function CocktailDetailPage({ params }: Props) {
+export default async function CocktailDetailPage({ params }: { params: { id: string } }) {
   const decodedId = decodeURIComponent(params.id);
 
   let cocktail: Cocktail | null = null;
