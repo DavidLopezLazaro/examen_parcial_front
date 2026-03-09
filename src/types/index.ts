@@ -1,1 +1,1 @@
-export type { Country, Currency } from "./country";
+export type { Cocktail, CocktailsResponse } from "./cocktail";

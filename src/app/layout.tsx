@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Countries App",
-  description: "Explorador de países del mundo",
+  title: "Cocktails App",
+  description: "Explorador de cocktails",
 };
 
 export default function RootLayout({

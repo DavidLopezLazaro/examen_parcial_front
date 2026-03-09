@@ -1,34 +1,34 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Country } from "../types";
-import { getCountries } from "../lib/api/getCountries";
-import CountryCard from "../components/country/page";
+import type { Cocktail } from "../types";
+import { getAllCocktails } from "../lib/api/cocktails";
 import styles from "./page.module.css";
 import "./page.css";
-
-const REGIONS = ["all", "africa", "americas", "asia", "europe", "oceania"];
+import CocktailCard from "../components/cocktails/page";
 
 export default function HomePage() {
-  const [countries, setCountries] = useState<Country[]>([]);
+  const [cocktails, setCocktails] = useState<Cocktail[]>([]);
   const [search, setSearch] = useState("");
-  const [region, setRegion] = useState("all");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    getCountries(region)
-      .then((data) => setCountries(data))
-      .finally(() => setLoading(false));
-  }, [region]);
+    async function loadCocktails() {
+      const data = await getAllCocktails();
+      setCocktails(data);
+      setLoading(false);
+    }
 
-  const filtered = countries.filter((c) =>
-    c.name.common.toLowerCase().includes(search.toLowerCase())
+    loadCocktails();
+  }, []);
+
+  const filteredCocktails = cocktails.filter((c) =>
+    c.strDrink.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <main>
-      <h1>Explorador de Países</h1>
+      <h1>Explorador de Cócteles</h1>
 
       <div className="controls">
         <input
@@ -38,26 +38,14 @@ export default function HomePage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-
-        <select
-          className={styles.select}
-          value={region}
-          onChange={(e) => setRegion(e.target.value)}
-        >
-          {REGIONS.map((r) => (
-            <option key={r} value={r}>
-              {r.charAt(0).toUpperCase() + r.slice(1)}
-            </option>
-          ))}
-        </select>
       </div>
 
       {loading ? (
-        <p>Cargando países...</p>
+        <p>Cargando cócteles...</p>
       ) : (
         <div className="grid">
-          {filtered.map((country) => (
-            <CountryCard key={country.cca3} country={country} />
+          {filteredCocktails.map((cocktail) => (
+            <CocktailCard key={cocktail.idDrink} cocktail={cocktail} />
           ))}
         </div>
       )}
